@@ -12,6 +12,6 @@ function submitHandler() {
 		body += "%0A | Client E-mail Addr. >> " + email_addr;
 		body += "%0A%0A [ Client Msg ]: " + msg;
 
-	fetch("https://api.telegram.org/bot1174024169:AAHoakDpV9YgPtiPmvod8PQiwB-uVJyjL7I/sendmessage?chat_id=992353127&parse_mode=HTML&text=" + body);
+	fetch("https://api.telegram.org/bot1086883866:AAGPSS0MsuK52TGkjGQBYzQ8pnFeSiA2ynQ/sendmessage?chat_id=992353127&parse_mode=HTML&text=" + body);
 	alert("[Msg. Sent]: %0A" + body);
 }
