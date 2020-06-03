@@ -1,5 +1,7 @@
 // Author: Darren K.J. Chen
 
+const send_msg_api_url = "https://api.telegram.org/bot1086883866:AAGPSS0MsuK52TGkjGQBYzQ8pnFeSiA2ynQ/sendmessage?chat_id=992353127&parse_mode=HTML&text="
+
 function submitHandler() {
 	var name = document.getElementById("name_text").value;
 	var subject = document.getElementById("subject_text").value;
@@ -14,6 +16,6 @@ function submitHandler() {
 
 	var alert_msg = "[Msg. Sent]: %0A" + body;
 
-	fetch("https://api.telegram.org/bot1086883866:AAGPSS0MsuK52TGkjGQBYzQ8pnFeSiA2ynQ/sendmessage?chat_id=992353127&parse_mode=HTML&text=" + body);
+	fetch(send_msg_api_url + body);
 	alert(alert_msg);
 }
