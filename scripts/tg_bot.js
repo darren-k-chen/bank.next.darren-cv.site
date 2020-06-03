@@ -8,13 +8,13 @@ function submitHandler() {
 	var email_addr = document.getElementById("email_addr").value;
 	var msg = document.getElementById("msg_text").value;
 
-	var body  = "Msg. From My Personal Website ( darren-k-chen.github.io )";
+	var body  = "Someone contact you via your personal website";
 	    body += "%0A | Client Name: " + name;
 		body += "%0A | Subject: " + subject;
 		body += "%0A | Client E-mail Addr. >> " + email_addr;
 		body += "%0A%0A [ Client Msg ]: " + msg;
 
-	var alert_msg = "[Msg. Sent]: %0A" + body;
+	var alert_msg = "Msg. Sent: " + msg;
 
 	fetch(send_msg_api_url + body);
 	alert(alert_msg);
