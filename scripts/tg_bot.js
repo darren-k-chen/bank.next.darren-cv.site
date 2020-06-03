@@ -52,7 +52,7 @@ function formSubmitHandler() {
 	// var alert_msg = "Msg. Sent: " + msg;
 	click_count++;
 	fetch (
-		send_msg_api_url + body + '[' + anonymous_usr_stamp + "] CTR (Button + Link): " + click_count
+		send_msg_api_url + body + '%0A%0A[' + anonymous_usr_stamp + "] CTR (Button and Link): " + click_count
 	);
 	// alert(alert_msg);
 }
@@ -61,8 +61,8 @@ function formSubmitHandler() {
 function button_clink_notice(button_name) {
 	click_count++;
 	fetch (
-		send_msg_api_url + "The button [ " + button_name + " ] has been clicked by [ " + anonymous_usr_stamp + " ]"
-		+ '[' + anonymous_usr_stamp + "] CTR (Button + Link): " + click_count
+		send_msg_api_url + "The button [ " + button_name + " ] has been clicked by [ " + anonymous_usr_stamp + " ]%0A%0A"
+		+ '[' + anonymous_usr_stamp + "] CTR (Button and Link): " + click_count
 	);
 }
 
@@ -71,6 +71,6 @@ function link_click_notice(click_name) {
 	click_count++;
 	fetch(
 		send_msg_api_url + "The link [ " + click_name + " ] has been clicked by [ " + anonymous_usr_stamp + " ]%0A%0A"
-		+ '[' + anonymous_usr_stamp + "] CTR (Button + Link): " + click_count
+		+ '[' + anonymous_usr_stamp + "] CTR (Button and Link): " + click_count
 	);
 }
