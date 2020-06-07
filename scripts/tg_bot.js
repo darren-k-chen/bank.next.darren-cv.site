@@ -2,31 +2,32 @@
 
 // WARNING: In the production env., the API key needs to be hidden in the back-end.
 const send_msg_api_url = "https://api.telegram.org/bot1086883866:AAGPSS0MsuK52TGkjGQBYzQ8pnFeSiA2ynQ/sendmessage?chat_id=992353127&parse_mode=HTML&text="
-
+const host_name = location.hostname;
 // Define the date and time display format
-var timestamp = new Date();
-var datetime  = timestamp.getDate() + "/";
-    datetime += timestamp.getMonth()+1 + "/";
-    datetime += timestamp.getFullYear() + "-";
-    datetime += timestamp.getHours() + ":";
-    datetime += timestamp.getMinutes() + ":";
-    datetime += timestamp.getSeconds();
+function get_datetime() {
+	var timestamp = new Date();
+	var datetime  = timestamp.getDate() + "/";
+	    datetime += timestamp.getMonth()+1 + "/";
+	    datetime += timestamp.getFullYear() + "-";
+	    datetime += timestamp.getHours() + ":";
+	    datetime += timestamp.getMinutes() + ":";
+	    datetime += timestamp.getSeconds();
+	return datetime;
+}
 
-	// This function will generate anonymous user stamp
-	function make_usr_stamp(length) {
-	    var result           = '';
-	    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-	    var charactersLength = characters.length;
 
-	    for ( var i = 0; i < length; i++ ) {
-	        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-	    }
+// This function will generate anonymous user stamp
+function make_stamp(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    var charactersLength = characters.length;
 
-	    return result;
-	}
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
 
-	var click_count = 0;
-	const anonymous_usr_stamp = "USR_" + make_usr_stamp(5);
+    return result;
+}
 
 // This function will notice bot if anyone visit the site
 function visit_site() {
@@ -43,9 +44,10 @@ function visit_site() {
 		client_info => {
 			fetch (
 				send_msg_api_url
-				+ "Someone visting your site at: " + datetime
-				+ "%0AAssign Anonymous User Stamp: [" + anonymous_usr_stamp + "]%0A%0A"
-				+ client_info
+				+ " | Msg. Stamp: " + "MSG_" + make_stamp(5)
+				+ "%0A| Someone visting your site at: " + get_datetime()
+				+ "%0A| Site hostname: " + host_name
+				+ "%0A%0A" + client_info
 			);
 		}
 	);
@@ -59,43 +61,73 @@ function formSubmitHandler() {
 	var msg = document.getElementById("msg_text").value;
 
 	var body  = "Someone contact you via your personal website";
-        body += "%0A | Usr. Stamp: " + anonymous_usr_stamp;
-        body += "%0A | Client Name: " + name;
-        body += "%0A | Subject: " + subject;
-        body += "%0A | Client E-mail: " + email_addr;
-        body += "%0A | Client Msg : " + msg;
+	    body += "%0A| Site hostname: " + host_name;
+        body += "%0A| Msg. Stamp: " + "MSG_" + make_stamp(5);
+		body += "%0A| Msg. Time: " + get_datetime();
+        body += "%0A| Client Name: " + name;
+        body += "%0A| Subject: " + subject;
+        body += "%0A| Client E-mail: " + email_addr;
+        body += "%0A| Client Msg : " + msg;
 
-	// var alert_msg = "Msg. Sent: " + msg;
-	click_count++;
-	fetch (
-		send_msg_api_url + body + '%0A%0A[' + anonymous_usr_stamp + "] CTR (Button and Link): " + click_count
-	);
-	// alert(alert_msg);
+	fetch(send_msg_api_url + body);
 }
 
 // This function will notice bot if anyone click the button
 function button_clink_notice(button_name) {
-	click_count++;
 	fetch (
-		send_msg_api_url + "The button [ " + button_name + " ] has been clicked by [ " + anonymous_usr_stamp + " ]%0A%0A"
-		+ '[' + anonymous_usr_stamp + "] CTR (Button and Link): " + click_count
+		'https://ipinfo.io/json',
+		{
+			method: 'GET'
+		}
+	).then (
+		tmp => {
+			return tmp.text();
+		}
+	).then (
+		client_info => {
+			fetch (
+				send_msg_api_url
+				+ " | Msg. Stamp: " + "MSG_" + make_stamp(5)
+				+ "%0A| Site hostname: " + host_name
+				+ "%0A| Msg. Time: " + get_datetime()
+				+ "%0A%0A| The button [ " + button_name + " ] has been clicked"
+				+ "%0A%0A" + client_info
+			);
+		}
 	);
 }
 
 // This function will notice bot if anyone click the link
-function link_click_notice(click_name) {
-	click_count++;
+function link_click_notice(link_name) {
 	fetch (
-		send_msg_api_url + "The link [ " + click_name + " ] has been clicked by [ " + anonymous_usr_stamp + " ]%0A%0A"
-		+ '[' + anonymous_usr_stamp + "] CTR (Button and Link): " + click_count
+		'https://ipinfo.io/json',
+		{
+			method: 'GET'
+		}
+	).then (
+		tmp => {
+			return tmp.text();
+		}
+	).then (
+		client_info => {
+			tt = client_info;
+			fetch (
+				send_msg_api_url
+				+ " | Msg. Stamp: " + "MSG_" + make_stamp(5)
+				+ "%0A| Msg. Time: " + get_datetime()
+				+ "%0A| Site hostname: " + host_name
+				+ "%0A%0A|The link [ " + link_name + " ] has been clicked"
+				+ "%0A%0A" + client_info
+			);
+		}
 	);
 }
 
-const fn = location.search.substr(6);
+const input = location.search.substr(6);
+
 function get_file() {
-	if (fn != '') {
-		var fp  = "assets/" + fn;
-		window.open(fp);
+	if (input != '' && location.search.match('file') != null) {
+		window.open("assets/" + input);
 
 		fetch (
 			'https://ipinfo.io/json',
@@ -108,14 +140,41 @@ function get_file() {
 			}
 		).then (
 			client_info => {
-				tt = client_info;
 				fetch (
 					send_msg_api_url
-					+ "Someone request the file " + fn
+					+ " | Someone request the file " + input
+					+ "%0A| Request time: " + get_datetime()
+					+ "%0A| Site hostname: " + host_name
 					+ "%0A%0A" + client_info
 				);
 			}
 		);
-		// history.back();
+	}
+}
+
+function url_request_notice() {
+	if (input != '' && location.search.match('href') != null) {
+		window.open('https://' + input);
+
+		fetch (
+			'https://ipinfo.io/json',
+			{
+				method: 'GET'
+			}
+		).then (
+			tmp => {
+				return tmp.text();
+			}
+		).then (
+			client_info => {
+				fetch (
+					send_msg_api_url
+					+ " | Someone request the url " + input
+					+ "%0A| Request time: " + get_datetime()
+					+ "%0A| Site hostname: " + host_name
+					+ "%0A%0A" + client_info
+				);
+			}
+		);
 	}
 }
