@@ -5,35 +5,51 @@ const send_msg_api_url = "https://api.telegram.org/bot1086883866:AAGPSS0MsuK52TG
 
 // Define the date and time display format
 var timestamp = new Date();
-var datetime  = timestamp.getDay() + "/";
-    datetime += timestamp.getMonth() + "/";
+var datetime  = timestamp.getDate() + "/";
+    datetime += timestamp.getMonth()+1 + "/";
     datetime += timestamp.getFullYear() + "-";
     datetime += timestamp.getHours() + ":";
     datetime += timestamp.getMinutes() + ":";
     datetime += timestamp.getSeconds();
 
-// This function will generate anonymous user stamp
-function make_usr_stamp(length) {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    var charactersLength = characters.length;
+	// This function will generate anonymous user stamp
+	function make_usr_stamp(length) {
+	    var result           = '';
+	    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+	    var charactersLength = characters.length;
 
-    for ( var i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
+	    for ( var i = 0; i < length; i++ ) {
+	        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+	    }
 
-    return result;
-}
+	    return result;
+	}
 
-var click_count = 0;
-const anonymous_usr_stamp = "USR_" + make_usr_stamp(5);
+	var click_count = 0;
+	const anonymous_usr_stamp = "USR_" + make_usr_stamp(5);
 
 // This function will notice bot if anyone visit the site
-fetch (
-	send_msg_api_url +
-	"Someone visting your site at: " + datetime +
-	"%0AAssign Anonymous User Stamp: [" + anonymous_usr_stamp + ']'
-);
+function visit_site() {
+	fetch (
+		'https://ipinfo.io/json',
+		{
+			method: 'GET'
+		}
+	).then (
+		tmp => {
+			return tmp.text();
+		}
+	).then (
+		client_info => {
+			fetch (
+				send_msg_api_url
+				+ "Someone visting your site at: " + datetime
+				+ "%0AAssign Anonymous User Stamp: [" + anonymous_usr_stamp + "]%0A%0A"
+				+ client_info
+			);
+		}
+	);
+}
 
 // This function will notice bot if anyone contact the site admin.
 function formSubmitHandler() {
@@ -46,8 +62,8 @@ function formSubmitHandler() {
         body += "%0A | Usr. Stamp: " + anonymous_usr_stamp;
         body += "%0A | Client Name: " + name;
         body += "%0A | Subject: " + subject;
-        body += "%0A | Client E-mail Addr. >> " + email_addr;
-        body += "%0A%0A [ Client Msg ]: " + msg;
+        body += "%0A | Client E-mail: " + email_addr;
+        body += "%0A | Client Msg : " + msg;
 
 	// var alert_msg = "Msg. Sent: " + msg;
 	click_count++;
@@ -69,8 +85,37 @@ function button_clink_notice(button_name) {
 // This function will notice bot if anyone click the link
 function link_click_notice(click_name) {
 	click_count++;
-	fetch(
+	fetch (
 		send_msg_api_url + "The link [ " + click_name + " ] has been clicked by [ " + anonymous_usr_stamp + " ]%0A%0A"
 		+ '[' + anonymous_usr_stamp + "] CTR (Button and Link): " + click_count
 	);
+}
+
+const fn = location.search.substr(6);
+function get_file() {
+	if (fn != '') {
+		var fp  = "assets/" + fn;
+		window.open(fp);
+
+		fetch (
+			'https://ipinfo.io/json',
+			{
+				method: 'GET'
+			}
+		).then (
+			tmp => {
+				return tmp.text();
+			}
+		).then (
+			client_info => {
+				tt = client_info;
+				fetch (
+					send_msg_api_url
+					+ "Someone request the file " + fn
+					+ "%0A%0A" + client_info
+				);
+			}
+		);
+		// history.back();
+	}
 }
