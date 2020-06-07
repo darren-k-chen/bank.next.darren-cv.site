@@ -125,9 +125,10 @@ function link_click_notice(link_name) {
 
 const input = location.search.substr(6);
 
+// This function will notice bot if anyone request the file on the website
 function get_file() {
 	if (input != '' && location.search.match('file') != null) {
-		window.open("assets/" + input);
+		window.location.href = "assets/" + input;
 
 		fetch (
 			'https://ipinfo.io/json',
@@ -152,9 +153,10 @@ function get_file() {
 	}
 }
 
+// This function will notice bot if anyone request the url on the website
 function url_request_notice() {
 	if (input != '' && location.search.match('href') != null) {
-		window.open('https://' + input);
+		window.location.href = 'https://' + input;
 
 		fetch (
 			'https://ipinfo.io/json',
