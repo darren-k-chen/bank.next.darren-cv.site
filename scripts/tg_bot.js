@@ -3,6 +3,7 @@
 // WARNING: In the production env., the API key needs to be hidden in the back-end.
 const send_msg_api_url = "https://api.telegram.org/bot1086883866:AAGPSS0MsuK52TGkjGQBYzQ8pnFeSiA2ynQ/sendmessage?chat_id=992353127&parse_mode=HTML&text="
 const host_name = location.hostname;
+
 // Define the date and time display format
 function get_datetime() {
 	var timestamp = new Date();
@@ -29,7 +30,10 @@ function make_stamp(length) {
     return result;
 }
 
-// This function will notice bot if anyone visit the site
+// Get the input value
+const input = location.search.substr(6);
+
+// This function will work if anyone visit the site
 function visit_site() {
 	fetch (
 		'https://ipinfo.io/json',
@@ -42,13 +46,36 @@ function visit_site() {
 		}
 	).then (
 		client_info => {
-			fetch (
-				send_msg_api_url
-				+ " | Msg. Stamp: " + "MSG_" + make_stamp(5)
-				+ "%0A| Someone visting your site at: " + get_datetime()
-				+ "%0A| Site hostname: " + host_name
-				+ "%0A%0A" + client_info
-			);
+			if (input != '' && location.search.match('file') != null) {
+				// This function will notice bot if anyone request the file on the site
+				window.location.href = "assets/" + input;
+				fetch (
+					send_msg_api_url
+					+ " | Someone request the file " + input
+					+ "%0A| Request time: " + get_datetime()
+					+ "%0A| Site hostname: " + host_name
+					+ "%0A%0A" + client_info
+				)
+			} else if (input != '' && location.search.match('href') != null) {
+				// This function will notice bot if anyone request the url on the site
+				window.location.href = 'https://' + input;
+				fetch (
+					send_msg_api_url
+					+ " | Someone request the url " + input
+					+ "%0A| Request time: " + get_datetime()
+					+ "%0A| Site hostname: " + host_name
+					+ "%0A%0A" + client_info
+				)
+			} else {
+				// This function will notice bot if anyone visit the site
+				fetch (
+					send_msg_api_url
+					+ " | Msg. Stamp: " + "MSG_" + make_stamp(5)
+					+ "%0A| Someone visting your site at: " + get_datetime()
+					+ "%0A| Site hostname: " + host_name
+					+ "%0A%0A" + client_info
+				);
+			}
 		}
 	);
 }
@@ -121,62 +148,4 @@ function link_click_notice(link_name) {
 			);
 		}
 	);
-}
-
-const input = location.search.substr(6);
-
-// This function will notice bot if anyone request the file on the website
-function get_file() {
-	if (input != '' && location.search.match('file') != null) {
-		window.location.href = "assets/" + input;
-
-		fetch (
-			'https://ipinfo.io/json',
-			{
-				method: 'GET'
-			}
-		).then (
-			tmp => {
-				return tmp.text();
-			}
-		).then (
-			client_info => {
-				fetch (
-					send_msg_api_url
-					+ " | Someone request the file " + input
-					+ "%0A| Request time: " + get_datetime()
-					+ "%0A| Site hostname: " + host_name
-					+ "%0A%0A" + client_info
-				);
-			}
-		);
-	}
-}
-
-// This function will notice bot if anyone request the url on the website
-function url_request_notice() {
-	if (input != '' && location.search.match('href') != null) {
-		window.location.href = 'https://' + input;
-
-		fetch (
-			'https://ipinfo.io/json',
-			{
-				method: 'GET'
-			}
-		).then (
-			tmp => {
-				return tmp.text();
-			}
-		).then (
-			client_info => {
-				fetch (
-					send_msg_api_url
-					+ " | Someone request the url " + input
-					+ "%0A| Request time: " + get_datetime()
-					+ "%0A| Site hostname: " + host_name
-					+ "%0A%0A" + client_info
-				);
-			}
-		);
-	}
 }
