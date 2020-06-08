@@ -46,36 +46,36 @@ function visit_site() {
 		}
 	).then (
 		client_info => {
-			if (input != '' && location.search.match('file') != null) {
-				// This function will notice bot if anyone request the file on the site
-				window.location.href = "assets/" + input;
-				fetch (
-					send_msg_api_url
-					+ " | Someone request the file " + input
-					+ "%0A| Request time: " + get_datetime()
-					+ "%0A| Site hostname: " + host_name
-					+ "%0A%0A" + client_info
-				)
-			} else if (input != '' && location.search.match('href') != null) {
-				// This function will notice bot if anyone request the url on the site
-				window.location.href = 'https://' + input;
-				fetch (
-					send_msg_api_url
-					+ " | Someone request the url " + input
-					+ "%0A| Request time: " + get_datetime()
-					+ "%0A| Site hostname: " + host_name
-					+ "%0A%0A" + client_info
-				)
-			} else {
+			// if (input != '' && location.search.match('file') != null) {
+			// 	// This function will notice bot if anyone request the file on the site
+			// 	window.location.href = "assets/" + input;
+			// 	fetch (
+			// 		send_msg_api_url
+			// 		+ " | Someone request the file " + input
+			// 		+ "%0A| Request time: " + get_datetime()
+			// 		+ "%0A| Site hostname: " + host_name
+			// 		+ "%0A%0A" + client_info
+			// 	);
+			// } else if (input != '' && location.search.match('href') != null) {
+			// 	// This function will notice bot if anyone request the url on the site
+			// 	window.location.href = 'https://' + input;
+			// 	fetch (
+			// 		send_msg_api_url
+			// 		+ " | Someone request the url " + input
+			// 		+ "%0A| Request time: " + get_datetime()
+			// 		+ "%0A| Site hostname: " + host_name
+			// 		+ "%0A%0A" + client_info
+			// 	);
+			// } else {
 				// This function will notice bot if anyone visit the site
 				fetch (
 					send_msg_api_url
-					+ " | Msg. Stamp: " + "MSG_" + make_stamp(5)
+					+ " | USR. Stamp: " + "USR_" + make_stamp(5)
 					+ "%0A| Someone visting your site at: " + get_datetime()
 					+ "%0A| Site hostname: " + host_name
 					+ "%0A%0A" + client_info
 				);
-			}
+			// }
 		}
 	);
 }
@@ -125,27 +125,27 @@ function button_clink_notice(button_name) {
 }
 
 // This function will notice bot if anyone click the link
-function link_click_notice(link_name) {
-	fetch (
-		'https://ipinfo.io/json',
-		{
-			method: 'GET'
-		}
-	).then (
-		tmp => {
-			return tmp.text();
-		}
-	).then (
-		client_info => {
-			tt = client_info;
-			fetch (
-				send_msg_api_url
-				+ " | Msg. Stamp: " + "MSG_" + make_stamp(5)
-				+ "%0A| Msg. Time: " + get_datetime()
-				+ "%0A| Site hostname: " + host_name
-				+ "%0A%0A|The link [ " + link_name + " ] has been clicked"
-				+ "%0A%0A" + client_info
-			);
-		}
-	);
-}
+// function link_click_notice(link_name) {
+// 	fetch (
+// 		'https://ipinfo.io/json',
+// 		{
+// 			method: 'GET'
+// 		}
+// 	).then (
+// 		tmp => {
+// 			return tmp.text();
+// 		}
+// 	).then (
+// 		client_info => {
+// 			tt = client_info;
+// 			fetch (
+// 				send_msg_api_url
+// 				+ " | Msg. Stamp: " + "MSG_" + make_stamp(5)
+// 				+ "%0A| Msg. Time: " + get_datetime()
+// 				+ "%0A| Site hostname: " + host_name
+// 				+ "%0A%0A|The link [ " + link_name + " ] has been clicked"
+// 				+ "%0A%0A" + client_info
+// 			);
+// 		}
+// 	);
+// }
