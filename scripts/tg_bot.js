@@ -1,7 +1,7 @@
 // Author: Darren K.J. Chen
 
 // WARNING: In the production env., the API key needs to be hidden in the back-end.
-const send_msg_api_url = "https://api.telegram.org/bot1086883866:AAGPSS0MsuK52TGkjGQBYzQ8pnFeSiA2ynQ/sendmessage?chat_id=992353127&parse_mode=HTML&text="
+const send_msg_api_url = "https://api.telegram.org/bot1732639552:AAHTMcZNCaiuB99fLwMTo5KSpNHTKF-RdxA/sendmessage?chat_id=992353127&parse_mode=HTML&text="
 const host_name = location.hostname;
 
 // Define the date and time display format
